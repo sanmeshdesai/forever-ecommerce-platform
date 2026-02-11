@@ -13,10 +13,11 @@ const About = () => {
         <div className='my-10 flex flex-col md:flex-row gap-16'>
           <img className='w-full md:max-w-[450px]' src={assets.about_img} alt='' />
           <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis omnis temporibus officiis ad dolorum eius pariatur voluptatibus magnam, debitis dolores odio necessitatibus natus earum nam?</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, officia? Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio harum sint tempore dignissimos in distinctio excepturi non. Eos ducimus assumenda sint corrupti neque modi a.</p>
+            <p>Forever is a modern e-commerce platform built to deliver a clean, fast, and reliable online shopping experience.</p>
+            <p>Designed with a focus on usability and performance, Forever allows users to explore curated collections, manage their cart effortlessly, and place orders with confidence.
+This platform reflects a real-world approach to building scalable e-commerce applications using modern web technologies.</p>
             <b className='text-gray-800'>Our Mission</b>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, officia? Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio harum sint tempore dignissimos in distinctio excepturi non</p>
+            <p>Our mission is to create a seamless shopping experience by combining intuitive design, reliable functionality, and scalable architecture.</p>
           </div>
       </div>
 

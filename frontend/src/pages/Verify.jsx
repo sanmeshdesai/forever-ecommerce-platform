@@ -31,7 +31,7 @@ const verifyPayment = async () => {
     } catch (error) {
         console.log(error);
         toast.error(response.error.message)
-    }
+   }
 }
 
 useEffect(()=>{
