@@ -103,4 +103,24 @@ const adminLogin = async (req, res) => {
 
 }
 
-export { loginUser, registerUser, adminLogin }
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await userModel
+            .findById(req.body.userId)
+            .select("-password");
+
+        res.json({
+            success: true,
+            user,
+        });
+
+    } catch (error) {
+        res.json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+export { loginUser, registerUser, adminLogin, getUserProfile }
