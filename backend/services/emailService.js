@@ -1,35 +1,27 @@
-import nodemailer from 'nodemailer'
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendWelcomeEmail = async (name, email) => {
-    console.log("Email:", email);
-    console.log("Name:", name);
-    console.log("sendWelcomeEmail called");
-
     try {
 
-        const info = await transporter.sendMail({
-            from: process.env.EMAIL_USER,
+        const data = await resend.emails.send({
+            from: "Forever <onboarding@resend.dev>",
             to: email,
             subject: "Welcome to Forever 🎉",
+
             html: `
                 <h1>Welcome ${name}</h1>
+
                 <p>Thank you for joining Forever.</p>
-                <p>We are happy to have you with us.</p>
-            `,
+
+                <p>We're happy to have you with us.</p>
+            `
         });
 
-        console.log("Email sent successfully");
-        console.log("Message ID:", info.messageId);
+        console.log(data);
 
     } catch (error) {
-        console.error("Failed to send welcome email:", error);
+        console.log(error);
     }
-}
+};
