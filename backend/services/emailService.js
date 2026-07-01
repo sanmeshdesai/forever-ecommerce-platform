@@ -8,20 +8,17 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
-export const sendWelcomeEmail = async(name, email) => {
-     console.log("Email:", email);
+export const sendWelcomeEmail = async (name, email) => {
+    console.log("Email:", email);
     console.log("Name:", name);
-
-        console.log("sendWelcomeEmail called");
-
+    console.log("sendWelcomeEmail called");
 
     try {
 
-        await transporter.sendMail({
+        const info = await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
-            subject:  "Welcome to Forever 🎉",
+            subject: "Welcome to Forever 🎉",
             html: `
                 <h1>Welcome ${name}</h1>
                 <p>Thank you for joining Forever.</p>
@@ -29,13 +26,10 @@ export const sendWelcomeEmail = async(name, email) => {
             `,
         });
 
-                console.log("Email sent successfully");
-        console.log(info.messageId);
-           
+        console.log("Email sent successfully");
+        console.log("Message ID:", info.messageId);
 
-    } catch(error) {
-        console.log(error);
-        
+    } catch (error) {
+        console.error("Failed to send welcome email:", error);
     }
-    
 }
