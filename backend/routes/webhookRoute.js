@@ -1,8 +1,8 @@
 import express from "express";
 import stripeWebhook from "../controllers/webhookController.js";
 
-const router = express.Router();
+const webhookRouter = express.Router();
 
-router.post("/", stripeWebhook);
+webhookRouter.post("/", stripeWebhook);
 
-export default router;
+export default webhookRouter;

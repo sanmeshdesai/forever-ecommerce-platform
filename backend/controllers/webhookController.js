@@ -28,8 +28,15 @@ const stripeWebhook = async (req, res) => {
 
             const session = event.data.object;
 
-            const orderId = session.metadata.orderId;
-            const userId = session.metadata.userId;
+           const { orderId, userId } = session.metadata || {};
+
+if (!orderId || !userId) {
+    console.log("Missing metadata");
+    return res.status(400).json({
+        success: false,
+        message: "Missing order metadata",
+    });
+}
 
             await orderModel.findByIdAndUpdate(orderId, {
                 payment: true,
@@ -40,8 +47,7 @@ const stripeWebhook = async (req, res) => {
                 cartData: {},
             });
 
-            console.log("✅ Order marked as paid");
-
+console.log(`✅ Payment successful for order ${orderId}`);
             break;
         }
 

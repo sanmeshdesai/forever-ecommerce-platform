@@ -7,11 +7,19 @@ import userRouter from './routes/userRoute.js'
 import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/cartRoute.js'
 import orderRouter from './routes/orderRoutes.js'
-
+import webhookRouter from './routes/webhookRoute.js'
 
 //app config
 const app = express()
 const port = process.env.PORT || 4000
+
+
+app.use(
+  "/api/order/webhook",
+  express.raw({ type: "application/json" }),
+  webhookRouter
+);
+
 
 connectDB()
 
