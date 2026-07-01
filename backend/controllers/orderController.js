@@ -171,4 +171,44 @@ const updateStatus = async (req, res) => {
     
 }
 
-export { placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus}
+const getOrderStats = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const orders = await orderModel.find({ userId });
+
+        const stats = {
+            total: orders.length,
+
+            delivered: orders.filter(
+                order => order.status === "Delivered"
+            ).length,
+
+            pending: orders.filter(
+                order =>
+                    order.status === "Order Placed" ||
+                    order.status === "Packing" ||
+                    order.status === "Shipped" ||
+                    order.status === "Out for delivery"
+            ).length,
+
+            cancelled: orders.filter(
+                order => order.status === "Cancelled"
+            ).length,
+        };
+
+        res.json({
+            success: true,
+            stats,
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export { placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus, getOrderStats}

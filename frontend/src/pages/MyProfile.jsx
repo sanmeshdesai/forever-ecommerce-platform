@@ -9,6 +9,13 @@ const MyProfile = () => {
 
   const [user, setUser] = useState(null);
 
+  const [stats, setStats] = useState({
+    total: 0,
+    delivered: 0,
+    pending: 0,
+    cancelled: 0,
+});
+
   const fetchUserProfile = async () => {
     try {
       const response = await axios.post(
@@ -30,6 +37,27 @@ const MyProfile = () => {
     }
   };
 
+
+  const fetchOrderStats = async () => {
+    try {
+
+        const response = await axios.post(
+            backendUrl + "/api/order/stats",
+            {},
+            {
+                headers: { token }
+            }
+        );
+
+        if (response.data.success) {
+            setStats(response.data.stats);
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
   useEffect(() => {
     if (token) {
       fetchUserProfile();
@@ -45,6 +73,13 @@ const MyProfile = () => {
       </div>
     );
   }
+
+  useEffect(() => {
+    if (token) {
+        fetchUserProfile();
+        fetchOrderStats();
+    }
+}, [token]);
 
   return (
     <div className="min-h-[80vh] border-t py-10">
@@ -149,28 +184,28 @@ const MyProfile = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
               <div className="border rounded-lg p-5 text-center">
-                <h2 className="text-2xl font-bold">0</h2>
+                <h2 className="text-2xl font-bold">{stats.total}</h2>
                 <p className="text-sm text-gray-500 mt-2">
                   Total Orders
                 </p>
               </div>
 
               <div className="border rounded-lg p-5 text-center">
-                <h2 className="text-2xl font-bold text-green-600">0</h2>
+                <h2 className="text-2xl font-bold text-green-600">{stats.delivered}</h2>
                 <p className="text-sm text-gray-500 mt-2">
                   Delivered
                 </p>
               </div>
 
               <div className="border rounded-lg p-5 text-center">
-                <h2 className="text-2xl font-bold text-yellow-500">0</h2>
+                <h2 className="text-2xl font-bold text-yellow-500">{stats.pending}</h2>
                 <p className="text-sm text-gray-500 mt-2">
                   Pending
                 </p>
               </div>
 
               <div className="border rounded-lg p-5 text-center">
-                <h2 className="text-2xl font-bold text-red-500">0</h2>
+                <h2 className="text-2xl font-bold text-red-500">{stats.cancelled}</h2>
                 <p className="text-sm text-gray-500 mt-2">
                   Cancelled
                 </p>
