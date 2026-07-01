@@ -1,48 +1,29 @@
-import React, { useContext, useEffect } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { useSearchParams } from 'react-router-dom'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-
-
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Verify = () => {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
-    const { navigate, token, setCartItems, backendUrl } = useContext(ShopContext)
-const [ searchParams, setSearchParams] = useSearchParams()
+    useEffect(() => {
+        const sessionId = searchParams.get("session_id");
 
-const success = searchParams.get('success')
-const orderId = searchParams.get('orderId')
+        console.log(sessionId);
 
-const verifyPayment = async () => {
-    try {
-        if(!token) {
-            return null
-        }
+        setTimeout(() => {
+            navigate("/orders");
+        }, 2000);
 
-        const response = await axios.post(backendUrl + '/api/order/verifyStripe', {success,orderId}, {headers:{token}})
+    }, []);
 
-        if(response.data.success) {
-            setCartItems({})
-            navigate('/orders')
-        } else {
-            navigate('/cart')
-        }
-    } catch (error) {
-        console.log(error);
-        toast.error(response.error.message)
-   }
-}
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            <div>
+                <h2>Payment Successful 🎉</h2>
+                <p>Redirecting to your orders...</p>
+            </div>
+        </div>
+    );
+};
 
-useEffect(()=>{
-    verifyPayment()
-},[token])
-
-  return (
-    <div>
-
-    </div>
-  )
-}
-
-export default Verify
+export default Verify;
