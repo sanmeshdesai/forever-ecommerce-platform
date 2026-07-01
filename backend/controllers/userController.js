@@ -64,12 +64,20 @@ const registerUser = async (req, res) => {
             name, email, password: hashedPassword
         })
 
-        const user = await newUser.save()
-       console.log(user);
+        const user = await newUser.save();
 
-        const token = createToken(user._id)
-        res.json({success:true, token})
+try {
+    await sendWelcomeEmail(user.name, user.email);
+} catch (error) {
+    console.log("Welcome email failed:", error.message);
+}
 
+const token = createToken(user._id);
+
+res.json({
+    success: true,
+    token
+});
         
     } catch (error){
         console.log(error);
