@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useLocation } from 'react'
 import {assets} from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
@@ -6,6 +6,7 @@ import { ShopContext } from '../context/ShopContext'
 const Navbar = () => {
 
     const [visible,setVisible] = useState(false)
+    const location = useLocation();
 
     const {setShowSearch, getCartCount, navigate, token, setToken, setCartItems} = useContext(ShopContext);
 
@@ -46,7 +47,7 @@ const Navbar = () => {
 
         <div className='flex items-center gap-6'>
            
-           {token && (
+           {token && location.pathname === "/collection" && (
   <img
     onClick={() => setShowSearch(true)}
     src={assets.search_icon}
