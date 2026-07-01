@@ -1,6 +1,6 @@
-import React, { useContext, useState, useLocation } from 'react'
+import React, { useContext, useState,  } from 'react'
 import {assets} from '../assets/assets'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink,useLocation } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 
 const Navbar = () => {
