@@ -61,6 +61,7 @@ const MyProfile = () => {
   useEffect(() => {
     if (token) {
       fetchUserProfile();
+      fetchOrderStats();
     } else {
       navigate("/login");
     }
