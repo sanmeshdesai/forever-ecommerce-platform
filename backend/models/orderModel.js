@@ -8,7 +8,22 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, required:true , default: 'Order Placed'},
     paymentMethod: { type: String, required:true },
     payment: { type: Boolean, required:true, default: false },
-    date: { type: Number, required:true}
+    date: { type: Number, required:true},
+    stripeSessionId: {
+    type: String,
+    default: "",
+  },
+
+  stripePaymentIntentId: {
+    type: String,
+    default: "",
+  },
+
+  // Invoice number
+  invoiceNumber: {
+    type: String,
+    default: "",
+  },
 })
 
 const orderModel = mongoose.models.order || mongoose.model('order', orderSchema)

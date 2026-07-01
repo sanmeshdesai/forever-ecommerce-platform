@@ -42,9 +42,22 @@ const placeOrder = async (req, res) => {
 const placeOrderStripe = async (req, res) => {
 
     try {
+
+
+       
+
         const { userId, items, amount, address } = req.body;
 
         const { origin } = req.headers
+
+         const user = await userModel.findById(userId);
+
+if (!user) {
+    return res.json({
+        success: false,
+        message: "User not found"
+    });
+}
 
         const orderData = { 
             userId,
@@ -81,14 +94,26 @@ const placeOrderStripe = async (req, res) => {
             quantity: 1
         })
 
-        const session = await stripe.checkout.sessions.create ({
-            success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
-            cancel_url: `${origin}/verify?success=false&orderId=${newOrder._id}`,
-            line_items,
-            mode:'payment',
+        const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
 
-        })
+    customer_email: user.email,
 
+    line_items,
+
+    mode: "payment",
+
+    success_url: `${origin}/verify?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/verify?cancel=true`,
+
+    metadata: {
+        orderId: newOrder._id.toString(),
+        userId: userId.toString(),
+    },
+});
+
+newOrder.stripeSessionId = session.id;
+await newOrder.save();
         
         res.json({success:true, session_url:session.url});
 
@@ -106,7 +131,7 @@ const verifyStripe = async (req,res) => {
     try {
         if (success === 'true') {
             await orderModel.findByIdAndUpdate(orderId, {payment:true})
-            await userModel.findByIdAndUpdate(userId, {cardData: {}})
+            await userModel.findByIdAndUpdate(userId, {cartData: {}})
             res.json({success: true})
         } else {
             await orderModel.findByIdAndDelete(orderId)

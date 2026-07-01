@@ -2,6 +2,7 @@ import userModel from '../models/userModel.js'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { sendWelcomeEmail } from '../services/emailService.js'
 
 const createToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET)
@@ -64,6 +65,8 @@ const registerUser = async (req, res) => {
         })
 
         const user = await newUser.save()
+       console.log(user);
+
         const token = createToken(user._id)
         res.json({success:true, token})
 
