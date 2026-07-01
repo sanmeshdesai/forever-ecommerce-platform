@@ -74,12 +74,6 @@ const MyProfile = () => {
     );
   }
 
-  useEffect(() => {
-    if (token) {
-        fetchUserProfile();
-        fetchOrderStats();
-    }
-}, [token]);
 
   return (
     <div className="min-h-[80vh] border-t py-10">
