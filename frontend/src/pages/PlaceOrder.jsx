@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Title from '../components/Title'
 import CartTotal from '../components/CartTotal'
 import { assets } from '../assets/assets'
 import { ShopContext } from '../context/ShopContext'
 import axios from "axios";
 import {toast} from 'react-toastify'
+import { replace } from 'react-router-dom'
 
 const PlaceOrder = () => {
 
@@ -26,6 +27,17 @@ const PlaceOrder = () => {
     phone:''
   })
 
+  useEffect(() => {
+  if (!token) {
+    toast.info("Please login to place your order.");
+    navigate("/login", {replace: true});
+  }
+}, [token, navigate]);
+
+if (!token) {
+  return null;
+}
+
   const onChangeHandler = (event) => {
     const name = event.target.name
     const value = event.target.value
@@ -35,6 +47,11 @@ const PlaceOrder = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault()
+    if (!token) {
+    toast.info("Please login to place your order.");
+    navigate("/login");
+    return;
+  }
 
     try {
       

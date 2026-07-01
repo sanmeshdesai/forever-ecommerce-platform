@@ -19,37 +19,49 @@ const ShopContextProvider = (props) => {
     const navigate = useNavigate();
 
 
-    const addToCart = async (itemId,size) => {
+  const addToCart = async (itemId, size) => {
 
-        if(!size) {
-            toast.error('Select product size');
-            return;
-        }
+    if (!size) {
+        toast.error("Select product size");
+        return;
+    }
 
-        let cartData = structuredClone(cartItems);
-        if(cartData[itemId]) {
-            if(cartData[itemId][size]) {
-                cartData[itemId][size] += 1;
-            } else {
-                cartData[itemId][size] = 1;
-            }
+    // User must be logged in
+    if (!token) {
+        toast.info("Please login to add items to your cart.");
+        navigate("/login");
+        return;
+    }
 
+    let cartData = structuredClone(cartItems);
+
+    if (cartData[itemId]) {
+        if (cartData[itemId][size]) {
+            cartData[itemId][size] += 1;
         } else {
-            cartData[itemId] = {};
             cartData[itemId][size] = 1;
         }
-        setCartItems(cartData);
-
-        if(token) {
-            try {
-                await axios.post(backendUrl + '/api/cart/add', {itemId,size}, {headers:{token}})
-            } catch (error) {
-                console.log(error);
-                toast.error(error.message)
-            }
-        }
-
+    } else {
+        cartData[itemId] = {};
+        cartData[itemId][size] = 1;
     }
+
+    setCartItems(cartData);
+
+    try {
+        await axios.post(
+            backendUrl + "/api/cart/add",
+            { itemId, size },
+            { headers: { token } }
+        );
+
+        toast.success("Added to cart");
+
+    } catch (error) {
+        console.log(error);
+        toast.error(error.response?.data?.message || error.message);
+    }
+};
 
     const getCartCount = ()=> {
         let totalCount = 0;
